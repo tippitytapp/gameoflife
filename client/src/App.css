@@ -49,3 +49,12 @@ button{
   align-items: center;
   height:70vh
 }
+.home-page-btn{
+  margin: 2%;
+  height: 250px;
+  width: 500px;
+  color: orangered;
+  background: darkgrey;
+  font-size: 4rem;
+
+}

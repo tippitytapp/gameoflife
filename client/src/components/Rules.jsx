@@ -1,9 +1,10 @@
 import React from "react";
-
+import Header from "./Header"
 
 function Rules(){
     return(
         <div>
+          <Header/>
         <ol className="rules"> Rules:
           <li>Any live cell with fewer than two live neighbours dies, as if by underpopulation.</li>
           <li>Any live cell with two or three live neighbours lives on to the next generation.</li>

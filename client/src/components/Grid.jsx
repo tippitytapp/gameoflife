@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useRef} from "react";
 import produce from "immer"
+import Header from "./Header"
 
 
 const numRows = 24;
@@ -48,7 +49,7 @@ const play = useCallback(()=>{
     setTimeout(play, 150)
 },[])
 
-    return(<div className="game"><div className="buttons">
+    return(<><Header/><div className="game"><div className="buttons">
         <button onClick={()=>{setPlaying(true); playingRef.current = true; play()}}>Start Game</button>
         <button onClick={()=>{setPlaying(false); playingRef.current = false;}}>Stop Game</button>
         <button onClick={()=>setGrid(() => {
@@ -82,7 +83,7 @@ const play = useCallback(()=>{
             )})}
         </div>
         </div>
-    )
+    </>)
 }
 
 export default Grid;
