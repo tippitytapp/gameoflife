@@ -1,0 +1,51 @@
+/* *{
+  border: 1px solid black;
+} */
+
+.App {
+  text-align: center;
+}
+/* rules */
+ol{
+  width: 30%;
+  text-align: left;
+  position: absolute;
+  left: 5;
+  top: 25;
+}
+
+/* Grid */
+.grid{
+width: 65%;
+position: absolute;
+right: 0;
+margin-left: 1%;
+margin-top: 1%;
+
+}
+
+/* Footer */
+.footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+
+}
+.buttons{
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height:100%;
+  justify-content: flex-end;
+}
+button{
+  margin-left: 10%;
+  margin-top: 5%;
+  height: 50px;
+  border-radius: 10px;
+}
+.game{
+  display:flex;
+  align-items: center;
+  height:70vh
+}
