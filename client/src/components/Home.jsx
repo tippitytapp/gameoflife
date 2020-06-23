@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 function Home(){
     return(
         <div>
-            <h1>Conway's Game of Life</h1>
+            <h1 style={{fontSize: "4rem"}}>Conway's Game of Life</h1>
             <div className="homepagebuttons">
                 <Link to="/info"><button className="home-page-btn">What is Conway's Game of Life?</button></Link>
                 <Link to="/rules"><button className="home-page-btn">What are the rules?</button></Link>

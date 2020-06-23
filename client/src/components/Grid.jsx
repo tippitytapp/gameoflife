@@ -46,7 +46,7 @@ const play = useCallback(()=>{
         })
     })
 
-    setTimeout(play, 150)
+    setTimeout(play, 250)
 },[])
 
     return(<><Header/><div className="game"><div className="buttons">
