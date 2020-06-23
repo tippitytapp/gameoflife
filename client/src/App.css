@@ -88,3 +88,21 @@ img{
   height:138px;
   width:128px;
 }
+.changecolor{
+  width:10%;
+  margin:1%;
+}
+
+.cellcolor{
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width:100%;
+}
+.colorbuttons{
+  width:100%;
+  text-align: center;
+  margin-left:2%;
+}

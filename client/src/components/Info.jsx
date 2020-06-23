@@ -49,7 +49,7 @@ function Info(){
                 <p>Spaceships change their state and while doing so, they traverse across the plane. </p>
                 <p>Example of Spaceships include:</p>
                 <div className="spaceships">
-                <video width="750" height="500" controls >
+                <video width="750" height="500" controls="false" >
                     <source src={video} type="video/mp4"/>
                 </video>
                 </div>
