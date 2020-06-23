@@ -8,6 +8,7 @@ import Header from "./Header"
 import * as beacon from "../assets/beacon.gif"
 import * as blinker from "../assets/blinker.gif"
 import * as pulsar from "../assets/pulsar.gif"
+import * as video from "../assets/spaceships.mp4"
 
 function Info(){
     return(
@@ -30,11 +31,11 @@ function Info(){
                 <p>Still lifes do not move, nor do they change state. they sit still, forever, unless interupted by Oscillators or Spaceships</p>
                 <p>Examples of Still Lifes include:</p>
                 <div className="stilllifes">
-                <img src={Tub} alt="tub"/>
-                <img src={beehive} alt="behive" />
-                <img src={loaf} alt="loaf" />
-                <img src={boat} alt="boat" />
-                <img src={block} alt="block" />
+                    <img src={Tub} alt="tub"/>
+                    <img src={beehive} alt="behive" />
+                    <img src={loaf} alt="loaf" />
+                    <img src={boat} alt="boat" />
+                    <img src={block} alt="block" />
                 </div>
                 <h3>Oscillators:</h3>
                 <p>Oscillators are patterns that change, but do not move, they have a certain number of changes before they are back to their original state.</p>
@@ -44,6 +45,15 @@ function Info(){
                     <img src={blinker} alt="blinker" />
                     <img src={pulsar} alt="pulsar" />
                 </div>
+                <h3>Spaceships</h3>
+                <p>Spaceships change their state and while doing so, they traverse across the plane. </p>
+                <p>Example of Spaceships include:</p>
+                <div className="spaceships">
+                <video width="750" height="500" controls >
+                    <source src={video} type="video/mp4"/>
+                </video>
+                </div>
+
 
             </div>
         </>
