@@ -106,3 +106,9 @@ img{
   text-align: center;
   margin-left:2%;
 }
+
+.speedbuttons{
+display:flex;
+justify-content: center;
+align-items: center;
+}

@@ -13,6 +13,7 @@ const neighborpositions=[[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [
 function Grid(){
     const [playing, setPlaying] = useState(false)
     const [cellColor, setCellColor] = useState('orangered')
+    const [gameSpeed, setGameSpeed] = useState(250)
     const [dropdownOpen, setDropDownOpen] = useState(false)
     const toggle = () => {setDropDownOpen(prevState => !prevState)}
 const [grid, setGrid] = useState(() => {
@@ -23,6 +24,8 @@ const [grid, setGrid] = useState(() => {
     return rows;
 });
 const playingRef = useRef(playing)
+const speedRef = useRef(gameSpeed)
+speedRef.current = gameSpeed
 playingRef.current = playing
 const play = useCallback(()=>{
     if(!playingRef.current){
@@ -52,8 +55,7 @@ const play = useCallback(()=>{
         
         })
     })
-    console.log(generation)
-    setTimeout(play, 250)
+    setTimeout(play, speedRef.current)
 },[])
 
     return(<><Header/>
@@ -77,14 +79,24 @@ const play = useCallback(()=>{
 <div className="cellcolor">
     <h3>Change Cell Color</h3>
     <div className="colorbuttons">
-<button style={{backgroundColor:'red'}}className="changecolor" onClick={()=>setCellColor('red')}></button>
-<button style={{backgroundColor: 'orange'}} className='changecolor' onClick={()=>setCellColor('orange')}></button>
-<button style={{backgroundColor:'yellow'}}className="changecolor" onClick={()=>setCellColor('yellow')}></button>
-<button style={{backgroundColor: 'green'}} className='changecolor' onClick={()=>setCellColor('green')}></button>
-<button style={{backgroundColor:'blue'}}className="changecolor" onClick={()=>setCellColor('blue')}></button>
-<button style={{backgroundColor: 'indigo'}} className='changecolor' onClick={()=>setCellColor('indigo')}></button>
-<button style={{backgroundColor: 'violet'}} className='changecolor' onClick={()=>setCellColor('violet')}></button>
+        <button style={{backgroundColor:'red'}}className="changecolor" onClick={()=>setCellColor('red')}></button>
+        <button style={{backgroundColor: 'orange'}} className='changecolor' onClick={()=>setCellColor('orange')}></button>
+        <button style={{backgroundColor:'yellow'}}className="changecolor" onClick={()=>setCellColor('yellow')}></button>
+        <button style={{backgroundColor: 'green'}} className='changecolor' onClick={()=>setCellColor('green')}></button>
+        <button style={{backgroundColor:'blue'}}className="changecolor" onClick={()=>setCellColor('blue')}></button>
+        <button style={{backgroundColor: 'indigo'}} className='changecolor' onClick={()=>setCellColor('indigo')}></button>
+        <button style={{backgroundColor: 'violet'}} className='changecolor' onClick={()=>setCellColor('violet')}></button>
+    </div>
 </div>
+<div className="gamespeed">
+    <h3>Change Game Speed</h3>
+    <div className="speedbuttons">
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 250); console.log(gameSpeed)}} ><i class="fas fa-less-than"></i><i class="fas fa-less-than"></i><p>Slower</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 175); console.log(gameSpeed)}} ><i class="fas fa-less-than"></i><p>Slow</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(250); console.log(gameSpeed)}}>Default</button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 175); console.log(gameSpeed)}} ><i class="fas fa-greater-than"></i><p>Fast</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 250); console.log(gameSpeed)}} ><i class="fas fa-greater-than"></i><i class="fas fa-greater-than"></i><p>Faster</p></button>
+    </div>
 </div>
 
 </div>
