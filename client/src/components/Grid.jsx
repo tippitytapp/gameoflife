@@ -59,7 +59,7 @@ const play = useCallback(()=>{
 },[])
 
     return(<><Header/>
-    <p>there have been {generation} generations</p><div className="game"><div className="buttons">
+    <p className="generational">there have been      <h3 style={{color: `${cellColor}`, textDecoration: 'underline'}}>__{generation}__</h3>      generations</p><div className="game"><div className="buttons">
         <button onClick={()=>{setPlaying(true); playingRef.current = true; play()}}>Start Game</button>
         <button onClick={()=>{setPlaying(false); playingRef.current = false;}}>Stop Game</button>
         <button onClick={()=>setGrid(() => {
@@ -91,11 +91,11 @@ const play = useCallback(()=>{
 <div className="gamespeed">
     <h3>Change Game Speed</h3>
     <div className="speedbuttons">
-        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 250); console.log(gameSpeed)}} ><i class="fas fa-less-than"></i><i class="fas fa-less-than"></i><p>Slower</p></button>
-        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 175); console.log(gameSpeed)}} ><i class="fas fa-less-than"></i><p>Slow</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 250); console.log(gameSpeed)}} ><i className="fas fa-less-than"></i><i className="fas fa-less-than"></i><p>Slower</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 175); console.log(gameSpeed)}} ><i className="fas fa-less-than"></i><p>Slow</p></button>
         <button className="speedbtn" onClick={()=>{setGameSpeed(250); console.log(gameSpeed)}}>Default</button>
-        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 175); console.log(gameSpeed)}} ><i class="fas fa-greater-than"></i><p>Fast</p></button>
-        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 250); console.log(gameSpeed)}} ><i class="fas fa-greater-than"></i><i class="fas fa-greater-than"></i><p>Faster</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 175); console.log(gameSpeed)}} ><i className="fas fa-greater-than"></i><p>Fast</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 250); console.log(gameSpeed)}} ><i className="fas fa-greater-than"></i><i className="fas fa-greater-than"></i><p>Faster</p></button>
     </div>
 </div>
 

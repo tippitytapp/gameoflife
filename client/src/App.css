@@ -112,3 +112,9 @@ display:flex;
 justify-content: center;
 align-items: center;
 }
+
+.generational{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
