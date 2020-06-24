@@ -93,7 +93,7 @@ img{
   margin:1%;
 }
 
-.cellcolor{
+.cellcolor, .gamespeed, .boardsize{
   display:flex;
   flex-direction:column;
   align-items: center;
@@ -107,11 +107,11 @@ img{
   margin-left:2%;
 }
 
-.speedbuttons{
+/* .speedbuttons{
 display:flex;
 justify-content: center;
 align-items: center;
-}
+} */
 
 .generational{
   display:flex;

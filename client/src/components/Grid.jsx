@@ -7,15 +7,19 @@ import "bootstrap/dist/css/bootstrap.min.css"
 
 
 let generation = 0;
-const numRows = 24;
-const numCols = 49;
-const neighborpositions=[[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
 
 
 function Grid(){
+
+// const numRows = 24;
+// const numCols = 49;
+const neighborpositions=[[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
     const [playing, setPlaying] = useState(false)
+    const [numRows, setNumRows] = useState(25)
+    const [numCols, setNumCols] = useState(49)
     const [cellColor, setCellColor] = useState('orangered')
     const [gameSpeed, setGameSpeed] = useState(250)
+    // const [boardSize, setBoardSize] = useState(numRows, numCols)
     // const [dropdownOpen, setDropDownOpen] = useState(false)
     // const toggle = () => {setDropDownOpen(prevState => !prevState)}
 const [grid, setGrid] = useState(() => {
@@ -59,6 +63,10 @@ const play = useCallback(()=>{
     })
     setTimeout(play, speedRef.current)
 },[])
+const setBoardSize = (rows, cols) => {
+    setNumRows(rows);
+    setNumCols(cols)
+}
 
     return(<><Header/>
     <p className="generational">there have been      <h3 style={{color: `${cellColor}`, textDecoration: 'underline'}}>__{generation}__</h3>      generations</p><div className="game"><div className="buttons">
@@ -80,8 +88,7 @@ const play = useCallback(()=>{
     }
     return rows;
 })} >Reset</button>
-<div className="cellcolor">
-    <h3>Change Cell Color</h3>
+
     {/* <div className="colorbuttons">
         <button style={{backgroundColor:'red'}}className="changecolor" onClick={()=>setCellColor('red')}></button>
         <button style={{backgroundColor: 'orange'}} className='changecolor' onClick={()=>setCellColor('orange')}></button>
@@ -91,6 +98,18 @@ const play = useCallback(()=>{
         <button style={{backgroundColor: 'indigo'}} className='changecolor' onClick={()=>setCellColor('indigo')}></button>
         <button style={{backgroundColor: 'violet'}} className='changecolor' onClick={()=>setCellColor('violet')}></button>
     </div> */}
+    {/* <div className="gamespeed">
+    <h3>Change Game Speed</h3>
+    <div className="speedbuttons">
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 250); console.log(gameSpeed)}} ><i className="fas fa-less-than"></i><i className="fas fa-less-than"></i><p>Slower</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 175); console.log(gameSpeed)}} ><i className="fas fa-less-than"></i><p>Slow</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(250); console.log(gameSpeed)}}>Default</button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 175); console.log(gameSpeed)}} ><i className="fas fa-greater-than"></i><p>Fast</p></button>
+        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 250); console.log(gameSpeed)}} ><i className="fas fa-greater-than"></i><i className="fas fa-greater-than"></i><p>Faster</p></button>
+    </div>
+</div> */}
+<div className="cellcolor">
+    <h3>Change Cell Color</h3>
     <DropdownButton style={{background:`${cellColor}`, borderRadius:'5px'}}id="dropdown-basic-button" variant="secondary" title="cell color">
         <Dropdown.Item onClick={()=>setCellColor('red')} >Red</Dropdown.Item>
         <Dropdown.Item onClick={()=>setCellColor('orange')} >Orange</Dropdown.Item>
@@ -104,14 +123,21 @@ const play = useCallback(()=>{
 </div>
 <div className="gamespeed">
     <h3>Change Game Speed</h3>
-    <div className="speedbuttons">
-        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 250); console.log(gameSpeed)}} ><i className="fas fa-less-than"></i><i className="fas fa-less-than"></i><p>Slower</p></button>
-        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed + 175); console.log(gameSpeed)}} ><i className="fas fa-less-than"></i><p>Slow</p></button>
-        <button className="speedbtn" onClick={()=>{setGameSpeed(250); console.log(gameSpeed)}}>Default</button>
-        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 175); console.log(gameSpeed)}} ><i className="fas fa-greater-than"></i><p>Fast</p></button>
-        <button className="speedbtn" onClick={()=>{setGameSpeed(gameSpeed - 250); console.log(gameSpeed)}} ><i className="fas fa-greater-than"></i><i className="fas fa-greater-than"></i><p>Faster</p></button>
-    </div>
+    <DropdownButton style={{background:`${cellColor}`, borderRadius:'5px'}} id="dropdown-basic-button" variant="secondary" title="game speed" >
+        <Dropdown.Item onClick={()=>{setGameSpeed(2500)}}>2500ms(2.5s)</Dropdown.Item>
+        <Dropdown.Item onClick={()=>{setGameSpeed(1750)}}>1750ms(1.75s)</Dropdown.Item>
+        <Dropdown.Item onClick={()=>{setGameSpeed(1000)}}>1000ms(1s)</Dropdown.Item>
+        <Dropdown.Item onClick={()=>{setGameSpeed(250)}}>250ms (Default)</Dropdown.Item>
+        <Dropdown.Item onClick={()=>{setGameSpeed(1)}}>1ms</Dropdown.Item>
+    </DropdownButton>
 </div>
+<div className="boardsize">
+    <h3>Change Board Size</h3>
+    <DropdownButton style={{background:`${cellColor}`, borderRadius:'5px'}} id="dropdown-basic-button" variant="secondary" title="board size">
+        <Dropdown.Item onClick={()=>{setBoardSize(50, 50)}}>50 x 50</Dropdown.Item>
+    </DropdownButton>
+</div>
+
 
 </div>
         <div className="grid" style={{display: 'grid', gridTemplateColumns: `repeat(${numCols}, 20px)`}}>
@@ -120,7 +146,7 @@ const play = useCallback(()=>{
                 row.map((col, k) => {
                     return(
                         <div key={`${i}-${k}`} style={{width: 20, height: 20, backgroundColor: grid[i][k] ? `${cellColor}` : 'white', border: '1px solid darkgrey', borderRadius: 10}}  onClick={()=>{
-                            if(playing != true){
+                            if(playing !== true){
                                 generation = 0
                                 const newGrid = produce(grid, gridCopy => {
                                     gridCopy[i][k] = gridCopy[i][k] ? 0 : 1;
