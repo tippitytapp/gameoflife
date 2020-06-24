@@ -1,7 +1,9 @@
 import React, {useState, useCallback, useRef} from "react";
 import produce from "immer"
 import Header from "./Header"
-// import {Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from "reactstrap"
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import "bootstrap/dist/css/bootstrap.min.css"
 
 
 let generation = 0;
@@ -14,8 +16,8 @@ function Grid(){
     const [playing, setPlaying] = useState(false)
     const [cellColor, setCellColor] = useState('orangered')
     const [gameSpeed, setGameSpeed] = useState(250)
-    const [dropdownOpen, setDropDownOpen] = useState(false)
-    const toggle = () => {setDropDownOpen(prevState => !prevState)}
+    // const [dropdownOpen, setDropDownOpen] = useState(false)
+    // const toggle = () => {setDropDownOpen(prevState => !prevState)}
 const [grid, setGrid] = useState(() => {
     const rows = []
     for (let i = 0; i< numRows; i++){
@@ -61,10 +63,11 @@ const play = useCallback(()=>{
     return(<><Header/>
     <p className="generational">there have been      <h3 style={{color: `${cellColor}`, textDecoration: 'underline'}}>__{generation}__</h3>      generations</p><div className="game"><div className="buttons">
         <button onClick={()=>{setPlaying(true); playingRef.current = true; play()}}>Start Game</button>
-        <button onClick={()=>{setPlaying(false); playingRef.current = false;}}>Stop Game</button>
+        <button onClick={()=>{setPlaying(false); playingRef.current = false;}}>Pause Game</button>
         <button onClick={()=>setGrid(() => {
     const rows = []
     for (let i = 0; i< numRows; i++){
+        generation = 0
         rows.push(Array.from(Array(numCols), () => (Math.random() > 0.8 ? 1 : 0)))
     }
     return rows;
@@ -72,13 +75,14 @@ const play = useCallback(()=>{
     <button onClick={()=>setGrid(() => {
     const rows = []
     for (let i = 0; i< numRows; i++){
+        generation = 0;
         rows.push(Array.from(Array(numCols), () => 0))
     }
     return rows;
 })} >Reset</button>
 <div className="cellcolor">
     <h3>Change Cell Color</h3>
-    <div className="colorbuttons">
+    {/* <div className="colorbuttons">
         <button style={{backgroundColor:'red'}}className="changecolor" onClick={()=>setCellColor('red')}></button>
         <button style={{backgroundColor: 'orange'}} className='changecolor' onClick={()=>setCellColor('orange')}></button>
         <button style={{backgroundColor:'yellow'}}className="changecolor" onClick={()=>setCellColor('yellow')}></button>
@@ -86,7 +90,17 @@ const play = useCallback(()=>{
         <button style={{backgroundColor:'blue'}}className="changecolor" onClick={()=>setCellColor('blue')}></button>
         <button style={{backgroundColor: 'indigo'}} className='changecolor' onClick={()=>setCellColor('indigo')}></button>
         <button style={{backgroundColor: 'violet'}} className='changecolor' onClick={()=>setCellColor('violet')}></button>
-    </div>
+    </div> */}
+    <DropdownButton style={{background:`${cellColor}`, borderRadius:'5px'}}id="dropdown-basic-button" variant="secondary" title="cell color">
+        <Dropdown.Item onClick={()=>setCellColor('red')} >Red</Dropdown.Item>
+        <Dropdown.Item onClick={()=>setCellColor('orange')} >Orange</Dropdown.Item>
+        <Dropdown.Item onClick={()=>setCellColor('yellow')} >Yellow</Dropdown.Item>
+        <Dropdown.Item onClick={()=>setCellColor('green')} >Green</Dropdown.Item>
+        <Dropdown.Item onClick={()=>setCellColor('blue')} >Blue</Dropdown.Item>
+        <Dropdown.Item onClick={()=>setCellColor('indigo')} >Indigo</Dropdown.Item>
+        <Dropdown.Item onClick={()=>setCellColor('violet')} >Violet</Dropdown.Item>
+
+    </DropdownButton>
 </div>
 <div className="gamespeed">
     <h3>Change Game Speed</h3>
@@ -106,10 +120,13 @@ const play = useCallback(()=>{
                 row.map((col, k) => {
                     return(
                         <div key={`${i}-${k}`} style={{width: 20, height: 20, backgroundColor: grid[i][k] ? `${cellColor}` : 'white', border: '1px solid darkgrey', borderRadius: 10}}  onClick={()=>{
-                            const newGrid = produce(grid, gridCopy => {
-                                gridCopy[i][k] = gridCopy[i][k] ? 0 : 1;
-                            })
-                            setGrid(newGrid)
+                            if(playing != true){
+                                generation = 0
+                                const newGrid = produce(grid, gridCopy => {
+                                    gridCopy[i][k] = gridCopy[i][k] ? 0 : 1;
+                                })
+                                setGrid(newGrid)
+                            }
                         }}/>
                     )
                 })
