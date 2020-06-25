@@ -4,92 +4,100 @@ import Header from "./Header"
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import "bootstrap/dist/css/bootstrap.min.css"
+import {setGridGrid} from "./BoardSizeFunctions.jsx"
 
-
+// setting global variables for use wth useCallback
 let generation = 0;
 const neighborpositions=[[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
 let numRows = 25;
 let numCols = 49;
+let height = 581/numRows
+let width = 1248/numCols
+
 function Grid(){
 
-
-    // set state for number of rows and columns so that it can be modified by user selection 
-    // const [numRows, setNumRows] = useState(25)
-    // const [numCols, setNumCols] = useState(49)
     // set cellcolor so that the user can change the cell color
     const [cellColor, setCellColor] = useState('orangered')
     // set state to determine if the game is being played or not
     const [playing, setPlaying] = useState(false)
     // set the gamespeed so it can be changed by user easier
     const [gameSpeed, setGameSpeed] = useState(250)
-    const setBoardSize = (rows, cols) => {numRows = rows; numCols = cols}
-    
-    // const [boardSize, setBoardSize] = useState(numRows, numCols)
-    // const [dropdownOpen, setDropDownOpen] = useState(false)
-    // const toggle = () => {setDropDownOpen(prevState => !prevState)}
-    const [grid, setGrid] = useState(() => {
-        const rows = []
-        for (let i = 0; i< numRows; i++){
-            rows.push(Array.from(Array(numCols), () => Math.floor(Math.random(2))))
-        }
-        return rows;
-    });
-const playingRef = useRef(playing)
-const speedRef = useRef(gameSpeed)
-speedRef.current = gameSpeed
-playingRef.current = playing
-const play = useCallback(()=>{
-    if(!playingRef.current){
-        return
-    }
-    setGrid((oldgrid)=>{
-        return produce(oldgrid, gridCopy => {
-            generation += 1
-            for(let i=0; i< numRows; i++){
-                for (let j = 0; j < numCols; j++){
-                    let nb = 0;
-                    neighborpositions.forEach(([x, y])=>{
-                        const nI = i+x;
-                        const nJ = j+y;
-                        if (nI >= 0 && nI < numRows && nJ >= 0 && nJ < numCols){
+    // allows or dynamic updating of board size
+    const setBoardSize = (rows, cols) => {numRows = rows; numCols = cols; height=581/rows; width=1248/cols}
 
-                            nb += oldgrid[nI][nJ]
-                        }
-                    })
-                    if (nb < 2 || nb > 3){
-                        gridCopy[i][j] = 0;
-                    } else if(oldgrid[i][j] === 0 && nb === 3){
-                        gridCopy[i][j] = 1
-                    }
-                }
+    // const setGridGrid = () => {const rows = [];for (let i = 0; i< numRows; i++){rows.push(Array.from(Array(numCols), () => Math.floor(Math.random(2))))}return rows;}
+    const [grid, setGrid] = useState(setGridGrid())
+    const playingRef = useRef(playing)
+    const speedRef = useRef(gameSpeed)
+    speedRef.current = gameSpeed
+    playingRef.current = playing
+        // this is the game... 
+        const play = useCallback(()=>{
+            if(!playingRef.current){
+                return
             }
-        
-        })
-    })
-    setTimeout(play, speedRef.current)
-},[])
+            setGrid((oldgrid)=>{
+                return produce(oldgrid, gridCopy => {
+                    generation += 1
+                    for(let i=0; i< numRows; i++){
+                        for (let j = 0; j < numCols; j++){
+                            let nb = 0;
+                            neighborpositions.forEach(([x, y])=>{
+                                const nI = i+x;
+                                const nJ = j+y;
+                                if (nI >= 0 && nI < numRows && nJ >= 0 && nJ < numCols){
 
+                                    nb += oldgrid[nI][nJ]
+                                }
+                            })
+                            if (nb < 2 || nb > 3){
+                                gridCopy[i][j] = 0;
+                            } else if(oldgrid[i][j] === 0 && nb === 3){
+                                gridCopy[i][j] = 1
+                            }
+                        }
+                    }
+                
+                })
+            })
+            setTimeout(play, speedRef.current)
+        },[])
+
+        // start playing
+        const start = () => {setPlaying(true); playingRef.current = true; play()}
+        // pause playing
+        const pause = () => {setPlaying(false); playingRef.current = false;}
+        // randomize game
+        const randomize = () => {setGrid(() => {
+            const rows = []
+            for (let i = 0; i< numRows; i++){
+                generation = 0
+                rows.push(Array.from(Array(numCols), () => (Math.random() > 0.8 ? 1 : 0)))
+            }
+            return rows;
+        })}
+        // reset board
+        const reset = () => {setGrid(() => {
+            const rows = []
+            for (let i = 0; i< numRows; i++){
+                generation = 0;
+                rows.push(Array.from(Array(numCols), () => 0))
+            }
+            return rows;
+        })}
 
     return(<><Header/>
-    <p className="generational">there have been      <h3 style={{color: `${cellColor}`, textDecoration: 'underline'}}>__{generation}__</h3>      generations</p><div className="game"><div className="buttons">
-        <button onClick={()=>{setPlaying(true); playingRef.current = true; play()}}>Start Game</button>
-        <button onClick={()=>{setPlaying(false); playingRef.current = false;}}>Pause Game</button>
-        <button onClick={()=>setGrid(() => {
-    const rows = []
-    for (let i = 0; i< numRows; i++){
-        generation = 0
-        rows.push(Array.from(Array(numCols), () => (Math.random() > 0.8 ? 1 : 0)))
-    }
-    return rows;
-})}>Randomize Game</button>
-    <button onClick={()=>setGrid(() => {
-    const rows = []
-    for (let i = 0; i< numRows; i++){
-        generation = 0;
-        rows.push(Array.from(Array(numCols), () => 0))
-    }
-    return rows;
-})} >Reset</button>
+    <div className="generational">
+    <p>there have been</p>
+    <p style={{color: `${cellColor}`, textDecoration: 'underline', fontSize:'2rem'}}>__{generation}__</p>
+    <p> generations</p>
+    </div>
+    <div className="game">
+        <div className="buttons">
+        <button onClick={()=>start()}>Start Game</button>
+        <button onClick={()=>pause()}>Pause Game</button>
+        <button onClick={()=>randomize()}>Randomize Game</button>
+        <button onClick={()=>reset()} >Reset</button>
         {/* Cell color dropdown */}
         <div className="cellcolor">
             <h3>Change Cell Color</h3>
@@ -118,20 +126,20 @@ const play = useCallback(()=>{
 <div className="boardsize">
     <h3>Change Board Size</h3>
     <DropdownButton style={{background:`${cellColor}`, borderRadius:'5px'}} id="dropdown-basic-button" variant="secondary" title="board size">
-        <Dropdown.Item onClick={()=>{setBoardSize(25, 49)}}>25 x 49 (Default)</Dropdown.Item>
-        <Dropdown.Item onClick={()=>{setBoardSize(50, 50)}}>50 x 50</Dropdown.Item>
-        <Dropdown.Item onClick={()=>{setBoardSize(100, 100)}}>100 x 100</Dropdown.Item>
+        <Dropdown.Item onClick={()=>{setBoardSize(12, 25); reset()}}>12 x 25</Dropdown.Item>
+        <Dropdown.Item onClick={()=>{setBoardSize(25, 50); reset()}}>25 x 50 (Default)</Dropdown.Item>
+        <Dropdown.Item onClick={()=>{setBoardSize(35, 70); reset()}}>35 x 70</Dropdown.Item>
     </DropdownButton>
 </div>
 
 
 </div>
-        <div className="grid" style={{display: 'grid', gridTemplateColumns: `repeat(${numCols}, 20px)`}}>
+        <div className="grid" style={{display: 'grid', gridTemplateColumns: `repeat(${numCols}, ${height}px)`}}>
             {grid.map((row, i )=> { 
                 return(
                 row.map((col, k) => {
                     return(
-                        <div key={`${i}-${k}`} style={{width: 20, height: 20, backgroundColor: grid[i][k] ? `${cellColor}` : 'white', border: '1px solid darkgrey', borderRadius: 10}}  onClick={()=>{
+                        <div key={`${i}-${k}`} style={{width: width, height: height, backgroundColor: grid[i][k] ? `${cellColor}` : 'white', border: '1px solid darkgrey', borderRadius: 10}}  onClick={()=>{
                             if(playing !== true){
                                 generation = 0
                                 const newGrid = produce(grid, gridCopy => {
