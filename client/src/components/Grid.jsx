@@ -5,6 +5,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import "bootstrap/dist/css/bootstrap.min.css"
 
+
 // setting global variables for use wth useCallback
 let generation = 0;
 const neighborpositions=[[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
@@ -49,6 +50,7 @@ function Grid(){
                         for (let j = 0; j < numCols; j++){
                             let nb = 0;
                             neighborpositions.forEach(([x, y])=>{
+                                // this makes the edges wrap arround
                                 const nI = (i + x + numRows) % numRows;
                                 const nJ = (j + y + numCols) % numCols;
                                 if (nI >= 0 && nI < numRows && nJ >= 0 && nJ < numCols){
