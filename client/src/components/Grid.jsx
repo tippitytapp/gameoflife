@@ -4,7 +4,6 @@ import Header from "./Header"
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import "bootstrap/dist/css/bootstrap.min.css"
-import {setGridGrid} from "./BoardSizeFunctions.jsx"
 
 // setting global variables for use wth useCallback
 let generation = 0;
@@ -20,17 +19,24 @@ function Grid(){
     const [cellColor, setCellColor] = useState('orangered')
     // set state to determine if the game is being played or not
     const [playing, setPlaying] = useState(false)
+    const playingRef = useRef(playing)
+    playingRef.current = playing
     // set the gamespeed so it can be changed by user easier
     const [gameSpeed, setGameSpeed] = useState(250)
-    // allows or dynamic updating of board size
-    const setBoardSize = (rows, cols) => {numRows = rows; numCols = cols; height=581/rows; width=1248/cols}
-
-    // const setGridGrid = () => {const rows = [];for (let i = 0; i< numRows; i++){rows.push(Array.from(Array(numCols), () => Math.floor(Math.random(2))))}return rows;}
-    const [grid, setGrid] = useState(setGridGrid())
-    const playingRef = useRef(playing)
     const speedRef = useRef(gameSpeed)
     speedRef.current = gameSpeed
-    playingRef.current = playing
+        // allows or dynamic updating of board size
+        const setBoardSize = (rows, cols) => {numRows = rows; numCols = cols; height=581/rows; width=1248/cols}
+        const setGridGrid = () => {
+            const rows = [];
+            for (let i = 0; i< numRows; i++){
+                rows.push(Array.from(Array(numCols), () => Math.floor(Math.random(2))))
+            }
+            return rows;
+        }
+        // sets the grid
+        const [grid, setGrid] = useState(setGridGrid())
+
         // this is the game... 
         const play = useCallback(()=>{
             if(!playingRef.current){
@@ -43,8 +49,8 @@ function Grid(){
                         for (let j = 0; j < numCols; j++){
                             let nb = 0;
                             neighborpositions.forEach(([x, y])=>{
-                                const nI = i+x;
-                                const nJ = j+y;
+                                const nI = (i + x + numRows) % numRows;
+                                const nJ = (j + y + numCols) % numCols;
                                 if (nI >= 0 && nI < numRows && nJ >= 0 && nJ < numCols){
 
                                     nb += oldgrid[nI][nJ]
@@ -68,23 +74,31 @@ function Grid(){
         // pause playing
         const pause = () => {setPlaying(false); playingRef.current = false;}
         // randomize game
-        const randomize = () => {setGrid(() => {
+        const randomize = () => {
+            setGrid(() => {
             const rows = []
             for (let i = 0; i< numRows; i++){
+                // reset generation to 0
                 generation = 0
+                // create a grid with random alive and dead cells. 
                 rows.push(Array.from(Array(numCols), () => (Math.random() > 0.8 ? 1 : 0)))
             }
             return rows;
-        })}
+            })
+        }
         // reset board
-        const reset = () => {setGrid(() => {
+        const reset = () => {
+            setGrid(() => {
             const rows = []
             for (let i = 0; i< numRows; i++){
+                // reset generation to 0
                 generation = 0;
+                // create a grid of all dead cells
                 rows.push(Array.from(Array(numCols), () => 0))
             }
             return rows;
-        })}
+            })
+        }
 
     return(<><Header/>
     <div className="generational">
@@ -123,14 +137,15 @@ function Grid(){
                 <Dropdown.Item onClick={()=>{setGameSpeed(1)}}>1ms</Dropdown.Item>
             </DropdownButton>
         </div>
-<div className="boardsize">
-    <h3>Change Board Size</h3>
-    <DropdownButton style={{background:`${cellColor}`, borderRadius:'5px'}} id="dropdown-basic-button" variant="secondary" title="board size">
-        <Dropdown.Item onClick={()=>{setBoardSize(12, 25); reset()}}>12 x 25</Dropdown.Item>
-        <Dropdown.Item onClick={()=>{setBoardSize(25, 50); reset()}}>25 x 50 (Default)</Dropdown.Item>
-        <Dropdown.Item onClick={()=>{setBoardSize(35, 70); reset()}}>35 x 70</Dropdown.Item>
-    </DropdownButton>
-</div>
+        {/* Boardsize dropdown */}
+        <div className="boardsize">
+            <h3>Change Board Size</h3>
+            <DropdownButton style={{background:`${cellColor}`, borderRadius:'5px'}} id="dropdown-basic-button" variant="secondary" title="board size">
+                <Dropdown.Item onClick={()=>{setBoardSize(12, 25); reset()}}>12 x 25</Dropdown.Item>
+                <Dropdown.Item onClick={()=>{setBoardSize(25, 50); reset()}}>25 x 50 (Default)</Dropdown.Item>
+                <Dropdown.Item onClick={()=>{setBoardSize(35, 70); reset()}}>35 x 70</Dropdown.Item>
+            </DropdownButton>
+        </div>
 
 
 </div>
